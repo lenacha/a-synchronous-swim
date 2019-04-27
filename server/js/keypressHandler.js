@@ -13,7 +13,7 @@ const isValidMessage = (message) => {
   return _.contains(validMessages, message);
 };
 
-const logKeypress = (key) => {12
+const logKeypress = (key) => {
   // in raw-mode it's handy to see what's been typed
   // when not in raw mode, the terminal will do this for us
   if (process.stdin.isRaw) {

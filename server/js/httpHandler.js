@@ -16,15 +16,46 @@ module.exports.router = (req, res, next = ()=>{}) => {
 
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
   res.writeHead(200, headers);
-  // var parts = urlLib.parse(req.url, true);
-  // var query = parts.query
-  // if (query.direction !== undefined) {
-  //   res.write(query.direction);
-  // }
-  if(messageQueue.dequeue() !== undefined){
-    res.write(messageQueue.dequeue().toString())
-  } else {
-    res.write('')
+  
+  if(req.method === 'GET') {
+
+    if (req.url.startsWith('/swim')) {
+      var dequeuedMsg = messageQueue.dequeue()
+      if( dequeuedMsg !== undefined){
+        res.write(dequeuedMsg.toString())
+      } else {
+        res.write('')
+      }
+      res.end();
+    } else {
+      res.write('')
+      // res.write(filename);
+      res.end('')
+    }
+  
   }
-  res.end();
+  if (req.method === 'POST') {
+    let body = [];
+    req.on('data', chunk => {
+      body.push(chunk);
+    })
+    // make chunk into a buffer
+
+    req.on('end', () => {
+      var buf= Buffer.concat(body)
+      var water = multipart.getFile(buf)
+      console.log(water)
+      fs.writeFile(this.backgroundImageFile, water.data, function(err) {
+        if(err) {
+          console.log('Something went wrong')
+        } else {
+          console.log('Saved!')
+          res.end(`${module.exports.backgroundImageFile}/${water.filename}`);
+        }
+      })
+    })
+    res.end('')
+  }
 };
+
+// save the file correctly on the server

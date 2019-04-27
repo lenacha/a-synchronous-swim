@@ -21,9 +21,11 @@
       cache: false,
       contentType: false,
       processData: false,
-      success: () => {
+      success: (res) => {
         // reload the page
-        window.location = window.location.href;
+        console.log(res)
+        // window.location = window.location.href;
+        serverImage(res)
       }
     });
   };
@@ -72,8 +74,7 @@
   const serverSwim = () => {
     $.ajax({
       type: 'GET',
-      url: serverUrl,
-      //  + '?direction=' + keystroke,
+      url: `${serverUrl}/swim`,
       cache: false,
       contentType: false,
       processData: false,
@@ -86,5 +87,26 @@
   };
 
   window.serverSwim = serverSwim;
+  
 
+  const serverImage = (filepath) => {
+    $.ajax({
+      type: 'GET',
+      url: `${serverUrl}/filepathname`,
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: filepath,
+      success: (res) => {
+        // reload the page
+        // SwimTeam.move(res.toLowerCase());
+        var backgroundHTML = `<div><img src=${res}/></div>`
+        $('.background').append(backgroundHTML);
+        console.log(res);
+        console.log('Got image from server!');
+      }
+    });
+  };
 })();
+
+//style="background-image:
