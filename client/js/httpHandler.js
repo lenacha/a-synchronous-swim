@@ -69,10 +69,11 @@
     });
   };
 
-  const serverSwim = (keystroke) => {
+  const serverSwim = () => {
     $.ajax({
       type: 'GET',
-      url: serverUrl + '?direction=' + keystroke,
+      url: serverUrl,
+      //  + '?direction=' + keystroke,
       cache: false,
       contentType: false,
       processData: false,

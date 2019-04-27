@@ -1,5 +1,6 @@
 const _ = require('underscore');
 const keypress = require('keypress');
+const messageQueue = require('./messageQueue')
 
 ///////////////////////////////////////////////////////////////////////////////
 // Utility Function ///////////////////////////////////////////////////////////
@@ -12,7 +13,7 @@ const isValidMessage = (message) => {
   return _.contains(validMessages, message);
 };
 
-const logKeypress = (key) => {
+const logKeypress = (key) => {12
   // in raw-mode it's handy to see what's been typed
   // when not in raw mode, the terminal will do this for us
   if (process.stdin.isRaw) {
@@ -38,6 +39,8 @@ module.exports.initialize = () => {
     // check to see if the keypress itself is a valid message
     if (isValidMessage(key.name)) {
       console.log(`Message received: ${key.name}`);
+      // make "enqueue" happen
+      messageQueue.enqueue(key.name);
       return; // don't do any more processing on this key
     }
     
