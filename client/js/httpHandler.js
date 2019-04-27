@@ -17,7 +17,7 @@
     $.ajax({
       type: 'POST',
       data: formData,
-      url: 'FILL_ME_IN',
+      url: serverUrl,
       cache: false,
       contentType: false,
       processData: false,
@@ -45,5 +45,45 @@
 
     ajaxFileUplaod(file);
   });
+
+  $('#random').click(function(e){
+    ajaxRandomMoveCall();
+  });
+
+  $('#sendserver').click(function(e){
+    sendServerMove();
+  });
+
+  const ajaxRandomMoveCall = () => {
+    $.ajax({
+      type: 'GET',
+      url: serverUrl,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: (res) => {
+        // reload the page
+        console.log('Got response: ' + res);
+        SwimTeam.move(res);
+      }
+    });
+  };
+
+  const serverSwim = (keystroke) => {
+    $.ajax({
+      type: 'GET',
+      url: serverUrl + '?direction=' + keystroke,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: (res) => {
+        // reload the page
+        SwimTeam.move(res.toLowerCase());
+        console.log('Got server response: ' + res);
+      }
+    });
+  };
+
+  window.serverSwim = serverSwim;
 
 })();
